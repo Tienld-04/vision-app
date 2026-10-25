@@ -1,6 +1,9 @@
-using VisionApp.Core.Inspection;
+using VisionApp.Core.Constants;
+using VisionApp.Core.Enums;
+using VisionApp.Core.Models;
+using VisionApp.Core.Services;
 
-namespace VisionApp.Core.Tests.Inspection;
+namespace VisionApp.Core.Tests.Services;
 
 /* Kiểm tra luật gộp kết quả: thứ tự ưu tiên và chống "đạt cho có". */
 public class ResultAggregatorTests
@@ -15,6 +18,7 @@ public class ResultAggregatorTests
         ]);
 
         Assert.Equal(InspectionDecision.Ok, summary.Decision);
+        Assert.Equal(InspectionMessages.AllStepsPassed, summary.Reason);
         Assert.Null(summary.DefectCode);
     }
 
@@ -24,11 +28,11 @@ public class ResultAggregatorTests
         var summary = ResultAggregator.Aggregate(
         [
             StepResult.Passed("Alignment"),
-            StepResult.Failed("ComponentPresence", "MISSING_COMPONENT", "Thiếu R12")
+            StepResult.Failed("ComponentPresence", DefectCodes.MissingComponent, "Thiếu R12")
         ]);
 
         Assert.Equal(InspectionDecision.Ng, summary.Decision);
-        Assert.Equal("MISSING_COMPONENT", summary.DefectCode);
+        Assert.Equal(DefectCodes.MissingComponent, summary.DefectCode);
         Assert.Contains("ComponentPresence", summary.Reason);
     }
 
@@ -38,7 +42,7 @@ public class ResultAggregatorTests
         var summary = ResultAggregator.Aggregate(
         [
             StepResult.Error("SurfaceDefect", "Hết thời gian xử lý"),
-            StepResult.Failed("ComponentPresence", "MISSING_COMPONENT", "Thiếu R12")
+            StepResult.Failed("ComponentPresence", DefectCodes.MissingComponent, "Thiếu R12")
         ]);
 
         Assert.Equal(InspectionDecision.Ng, summary.Decision);
@@ -62,11 +66,11 @@ public class ResultAggregatorTests
         var summary = ResultAggregator.Aggregate(
         [
             StepResult.Passed("Alignment"),
-            StepResult.NeedsReview("ComponentPresence", "C5 mờ, độ tin cậy thấp", "MISSING_COMPONENT")
+            StepResult.NeedsReview("ComponentPresence", "C5 mờ, độ tin cậy thấp", DefectCodes.MissingComponent)
         ]);
 
         Assert.Equal(InspectionDecision.Review, summary.Decision);
-        Assert.Equal("MISSING_COMPONENT", summary.DefectCode);
+        Assert.Equal(DefectCodes.MissingComponent, summary.DefectCode);
     }
 
     [Fact]
@@ -75,6 +79,7 @@ public class ResultAggregatorTests
         var summary = ResultAggregator.Aggregate([]);
 
         Assert.Equal(InspectionDecision.Error, summary.Decision);
+        Assert.Equal(InspectionMessages.NoStepExecuted, summary.Reason);
     }
 
     [Fact]
@@ -106,12 +111,15 @@ public class ResultAggregatorTests
     {
         var summary = ResultAggregator.Aggregate(
         [
-            StepResult.Failed("ComponentPresence", "MISSING_COMPONENT", "Thiếu R12"),
-            StepResult.Failed("SurfaceDefect", "SCRATCH", "Xước 0.4 mm")
+            StepResult.Failed("ComponentPresence", DefectCodes.MissingComponent, "Thiếu R12"),
+            StepResult.Failed("SurfaceDefect", DefectCodes.Scratch, "Xước 0.4 mm")
         ]);
 
-        Assert.Equal("MISSING_COMPONENT", summary.DefectCode);
-        Assert.Contains("+1 lỗi khác", summary.Reason);
+        var primaryReason = string.Format(InspectionMessages.StepReasonFormat, "ComponentPresence", "Thiếu R12");
+        var expectedReason = string.Format(InspectionMessages.AdditionalFailuresFormat, primaryReason, 1);
+
+        Assert.Equal(DefectCodes.MissingComponent, summary.DefectCode);
+        Assert.Equal(expectedReason, summary.Reason);
     }
 
     [Fact]
@@ -132,7 +140,7 @@ public class ResultAggregatorTests
         var steps = new List<StepResult> { StepResult.Passed("Alignment") };
 
         var summary = ResultAggregator.Aggregate(steps);
-        steps.Add(StepResult.Failed("ComponentPresence", "MISSING_COMPONENT", "Thiếu R12"));
+        steps.Add(StepResult.Failed("ComponentPresence", DefectCodes.MissingComponent, "Thiếu R12"));
 
         Assert.Single(summary.Steps);
     }

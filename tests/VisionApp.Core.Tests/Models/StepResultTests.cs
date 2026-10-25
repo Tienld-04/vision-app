@@ -1,6 +1,7 @@
-using VisionApp.Core.Inspection;
+using VisionApp.Core.Constants;
+using VisionApp.Core.Models;
 
-namespace VisionApp.Core.Tests.Inspection;
+namespace VisionApp.Core.Tests.Models;
 
 /* Kiểm tra các ràng buộc khi tạo StepResult qua factory method. */
 public class StepResultTests
@@ -15,6 +16,14 @@ public class StepResultTests
     public void Ten_buoc_khong_duoc_rong()
     {
         Assert.Throws<ArgumentException>(() => StepResult.Passed(" "));
+    }
+
+    [Fact]
+    public void Passed_khong_truyen_message_thi_dung_thong_diep_mac_dinh()
+    {
+        var result = StepResult.Passed("Alignment");
+
+        Assert.Equal(InspectionMessages.StepPassed, result.Message);
     }
 
     [Fact]
