@@ -2,11 +2,6 @@
 
 Hệ thống **kiểm tra quang học tự động (AOI) cho bo mạch PCB**, viết bằng C# / .NET 10.
 
-Project học tập hướng tới vị trí **Machine Vision Engineer**: kết nối camera và xử lý ảnh
-với hệ thống quản lý sản xuất (MES) của nhà máy.
-
-> 🚧 Đang xây lại từ đầu, **từng phần một, từ Core lên giao diện**. Xem mục **Tiến độ** bên dưới.
-
 ---
 
 ## Hệ thống sẽ làm gì
