@@ -1,4 +1,8 @@
-namespace VisionApp.Core.Inspection;
+using VisionApp.Core.Constants;
+using VisionApp.Core.Enums;
+using VisionApp.Core.Models;
+
+namespace VisionApp.Core.Services;
 
 /* Gộp kết quả các bước thành một kết luận. Ưu tiên: Failed > Error > NeedsReview > Passed;
    không có bước nào Passed thì ra Error, không bao giờ ra Ok. */
@@ -12,32 +16,37 @@ public static class ResultAggregator
         if (failed.Count > 0)
         {
             var primary = failed[0];
-            var reason = WithOthersCount($"{primary.StepName}: {primary.Message}", failed.Count);
+            var reason = WithAdditionalFailures(StepReason(primary), failed.Count - 1);
             return Summary(InspectionDecision.Ng, reason, primary.DefectCode, steps);
         }
 
         var error = steps.FirstOrDefault(s => s.Status == StepStatus.Error);
         if (error is not null)
         {
-            return Summary(InspectionDecision.Error, $"{error.StepName}: {error.Message}", null, steps);
+            return Summary(InspectionDecision.Error, StepReason(error), null, steps);
         }
 
         var review = steps.FirstOrDefault(s => s.Status == StepStatus.NeedsReview);
         if (review is not null)
         {
-            return Summary(InspectionDecision.Review, $"{review.StepName}: {review.Message}", review.DefectCode, steps);
+            return Summary(InspectionDecision.Review, StepReason(review), review.DefectCode, steps);
         }
 
         if (!steps.Any(s => s.Status == StepStatus.Passed))
         {
-            return Summary(InspectionDecision.Error, "Không có bước kiểm tra nào được thực hiện", null, steps);
+            return Summary(InspectionDecision.Error, InspectionMessages.NoStepExecuted, null, steps);
         }
 
-        return Summary(InspectionDecision.Ok, "Đạt tất cả các bước kiểm tra", null, steps);
+        return Summary(InspectionDecision.Ok, InspectionMessages.AllStepsPassed, null, steps);
     }
 
-    private static string WithOthersCount(string message, int failedCount)
-        => failedCount > 1 ? $"{message} (+{failedCount - 1} lỗi khác)" : message;
+    private static string StepReason(StepResult step)
+        => string.Format(InspectionMessages.StepReasonFormat, step.StepName, step.Message);
+
+    private static string WithAdditionalFailures(string reason, int additionalCount)
+        => additionalCount > 0
+            ? string.Format(InspectionMessages.AdditionalFailuresFormat, reason, additionalCount)
+            : reason;
 
     private static InspectionSummary Summary(
         InspectionDecision decision, string reason, string? defectCode, IReadOnlyList<StepResult> steps)

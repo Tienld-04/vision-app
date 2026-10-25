@@ -1,4 +1,7 @@
-namespace VisionApp.Core.Inspection;
+using VisionApp.Core.Constants;
+using VisionApp.Core.Enums;
+
+namespace VisionApp.Core.Models;
 
 /* Kết quả bất biến của một bước kiểm tra, chỉ tạo được qua các factory method.
    Chỉ Duration sửa được bằng `with`, để pipeline gán thời gian chạy. */
@@ -22,7 +25,7 @@ public sealed record StepResult
 
     public TimeSpan Duration { get; init; }
 
-    public static StepResult Passed(string stepName, string message = "Đạt")
+    public static StepResult Passed(string stepName, string message = InspectionMessages.StepPassed)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(stepName);
         return new StepResult(stepName, StepStatus.Passed, null, message);

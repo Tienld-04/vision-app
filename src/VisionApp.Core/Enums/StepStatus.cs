@@ -1,4 +1,4 @@
-namespace VisionApp.Core.Inspection;
+namespace VisionApp.Core.Enums;
 
 /* Kết quả của MỘT bước kiểm tra đơn lẻ (định vị, kiểm linh kiện, kiểm bề mặt...). */
 public enum StepStatus

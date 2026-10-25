@@ -1,4 +1,4 @@
-namespace VisionApp.Core.Inspection;
+namespace VisionApp.Core.Enums;
 
 /* Kết luận cuối cùng cho một sản phẩm, sau khi đã tổng hợp kết quả mọi bước kiểm tra. */
 public enum InspectionDecision
