@@ -1,0 +1,28 @@
+## Build output
+[Bb]in/
+[Oo]bj/
+
+## Log khi chạy
+[Ll]og/
+[Ll]ogs/
+
+## IDE: Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+## SQLite (DB sinh ra lúc chạy)
+*.db
+*.db-shm
+*.db-wal
+
+## NuGet package tự đóng gói
+*.nupkg
+*.snupkg
+
+.claude/
+
+docs
+note.md
