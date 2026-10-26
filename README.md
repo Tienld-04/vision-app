@@ -53,7 +53,7 @@ MES giả lập (ASP.NET Core Web API)  ← process riêng, không project nào 
 | --- | ----------------------------------------------------- | -------------- | --- |
 | 1   | Mô hình kết luận: OK / NG / REVIEW / ERROR + luật gộp | Core           | ✅  |
 | 2   | Hình học: vùng kiểm tra (ROI) + kết quả định vị       | Core           | ✅  |
-| 3   | Recipe                                                | Core           | ⬜  |
+| 3   | Recipe + kiểm tra recipe hợp lệ                       | Core           | ✅  |
 | 4   | Interface + pipeline điều phối các bước               | Application    | ⬜  |
 | 5   | Nguồn ảnh + bước định vị                              | Infrastructure | ⬜  |
 | 6   | Bước kiểm linh kiện                                   | Infrastructure | ⬜  |
@@ -70,16 +70,19 @@ MES giả lập (ASP.NET Core Web API)  ← process riêng, không project nào 
 vision-app/
 ├── VisionApp.sln
 ├── src/
-│   └── VisionApp.Core/
-│       ├── Constants/           mã lỗi, câu chữ hiển thị
-│       ├── Enums/               kết luận, trạng thái bước
-│       ├── Models/              kết quả từng bước, kết quả tổng hợp
-│       ├── Services/            luật gộp kết quả
-│       └── note.md              giải thích chi tiết project này
+│   ├── VisionApp.Core/              tầng Domain
+│   │   ├── Constants/               mã lỗi, câu chữ hiển thị, giới hạn
+│   │   ├── Enums/                   kết luận, trạng thái bước
+│   │   ├── Entities/                Recipe
+│   │   ├── ValueObjects/            kết quả kiểm tra, hình học, cấu hình
+│   │   ├── Services/                luật gộp, chuyển toạ độ, kiểm tra recipe
+│   │   └── note.md                  giải thích chi tiết project này
+│   └── VisionApp.Application/       (đang tạm dừng)
+│       └── Interfaces/              IImageSource, IInspectionContext
 └── tests/
     └── VisionApp.Core.Tests/
-        ├── Models/
-        └── Services/
+        ├── Services/
+        └── ValueObjects/
 ```
 
 ---
