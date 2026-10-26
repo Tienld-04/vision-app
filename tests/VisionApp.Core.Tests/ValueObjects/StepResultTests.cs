@@ -1,7 +1,7 @@
 using VisionApp.Core.Constants;
-using VisionApp.Core.Models;
+using VisionApp.Core.ValueObjects;
 
-namespace VisionApp.Core.Tests.Models;
+namespace VisionApp.Core.Tests.ValueObjects;
 
 /* Kiểm tra các ràng buộc khi tạo StepResult qua factory method. */
 public class StepResultTests

@@ -1,6 +1,6 @@
 using VisionApp.Core.Constants;
 using VisionApp.Core.Enums;
-using VisionApp.Core.Models;
+using VisionApp.Core.ValueObjects;
 using VisionApp.Core.Services;
 
 namespace VisionApp.Core.Tests.Services;
