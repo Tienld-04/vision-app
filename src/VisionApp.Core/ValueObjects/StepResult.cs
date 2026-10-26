@@ -1,7 +1,7 @@
 using VisionApp.Core.Constants;
 using VisionApp.Core.Enums;
 
-namespace VisionApp.Core.Models;
+namespace VisionApp.Core.ValueObjects;
 
 /* Kết quả bất biến của một bước kiểm tra, chỉ tạo được qua các factory method.
    Chỉ Duration sửa được bằng `with`, để pipeline gán thời gian chạy. */
@@ -9,6 +9,8 @@ public sealed record StepResult
 {
     private StepResult(string stepName, StepStatus status, string? defectCode, string message)
     {
+        ArgumentNullException.ThrowIfNull(message);
+
         StepName = stepName;
         Status = status;
         DefectCode = defectCode;

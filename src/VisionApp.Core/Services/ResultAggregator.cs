@@ -1,6 +1,6 @@
 using VisionApp.Core.Constants;
 using VisionApp.Core.Enums;
-using VisionApp.Core.Models;
+using VisionApp.Core.ValueObjects;
 
 namespace VisionApp.Core.Services;
 
@@ -11,6 +11,11 @@ public static class ResultAggregator
     public static InspectionSummary Aggregate(IReadOnlyList<StepResult> steps)
     {
         ArgumentNullException.ThrowIfNull(steps);
+
+        foreach (var step in steps)
+        {
+            ArgumentNullException.ThrowIfNull(step, nameof(steps));
+        }
 
         var failed = steps.Where(s => s.Status == StepStatus.Failed).ToList();
         if (failed.Count > 0)
@@ -50,11 +55,5 @@ public static class ResultAggregator
 
     private static InspectionSummary Summary(
         InspectionDecision decision, string reason, string? defectCode, IReadOnlyList<StepResult> steps)
-        => new()
-        {
-            Decision = decision,
-            Reason = reason,
-            DefectCode = defectCode,
-            Steps = steps.ToArray()
-        };
+        => new(decision, reason, defectCode, steps);
 }

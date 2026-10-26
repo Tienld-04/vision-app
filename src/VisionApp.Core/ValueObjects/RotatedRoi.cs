@@ -1,4 +1,4 @@
-namespace VisionApp.Core.Models;
+namespace VisionApp.Core.ValueObjects;
 
 /* Vùng kiểm tra đã được đặt lên ẢNH CHỤP: có thể bị xoay nên mô tả bằng tâm, kích thước và góc
    (giống RotatedRect của OpenCV). Kích thước giữ nguyên so với Roi gốc. */
@@ -6,6 +6,7 @@ public sealed record RotatedRoi
 {
     public RotatedRoi(Point2D center, double width, double height, double angleDegrees)
     {
+        ArgumentNullException.ThrowIfNull(center);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(width);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(height);
 

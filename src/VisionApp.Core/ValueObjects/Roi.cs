@@ -1,4 +1,4 @@
-namespace VisionApp.Core.Models;
+namespace VisionApp.Core.ValueObjects;
 
 /* Vùng kiểm tra hình chữ nhật trên ẢNH CHUẨN, khai báo trong recipe. Đơn vị pixel,
    (X, Y) là góc trên bên trái. */

@@ -1,4 +1,4 @@
-using VisionApp.Core.Models;
+using VisionApp.Core.ValueObjects;
 
 namespace VisionApp.Core.Services;
 
@@ -17,6 +17,7 @@ public static class RoiTransformer
 
     public static Point2D ToLiveImage(Point2D point, AlignmentResult alignment)
     {
+        ArgumentNullException.ThrowIfNull(point);
         ArgumentNullException.ThrowIfNull(alignment);
 
         var radians = double.DegreesToRadians(alignment.AngleDegrees);

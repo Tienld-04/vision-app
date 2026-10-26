@@ -1,4 +1,4 @@
-namespace VisionApp.Core.Models;
+namespace VisionApp.Core.ValueObjects;
 
 /* Kết quả định vị bo: so với ảnh chuẩn, bo trên ảnh chụp xoay AngleDegrees quanh Pivot rồi dịch đi (OffsetX, OffsetY).
    Góc dương = xoay ngược chiều kim đồng hồ khi nhìn trên màn hình, cùng quy ước với OpenCV. */
@@ -6,6 +6,7 @@ public sealed record AlignmentResult
 {
     public AlignmentResult(Point2D pivot, double offsetX, double offsetY, double angleDegrees, double score)
     {
+        ArgumentNullException.ThrowIfNull(pivot);
         ArgumentOutOfRangeException.ThrowIfLessThan(score, 0);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(score, 1);
 
